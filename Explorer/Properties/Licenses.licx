@@ -1,0 +1,8 @@
+Infragistics.Windows.Ribbon.XamRibbon, InfragisticsWPF4.Ribbon.v15.1, Version=15.1.20151.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb
+Infragistics.Windows.DataPresenter.XamDataPresenter, InfragisticsWPF4.DataPresenter.v15.1, Version=15.1.20151.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb
+Infragistics.Controls.Interactions.XamDialogWindow, InfragisticsWPF4.Controls.Interactions.XamDialogWindow.v15.1, Version=15.1.20151.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb
+Infragistics.Controls.Menus.XamMenu, InfragisticsWPF4.Controls.Menus.XamMenu.v15.1, Version=15.1.20151.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb
+Infragistics.Controls.Menus.XamContextMenu, InfragisticsWPF4.Controls.Menus.XamMenu.v15.1, Version=15.1.20151.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb
+Infragistics.Controls.XamDock, InfragisticsWPF4.DataVisualization.v15.1, Version=15.1.20151.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb
+Infragistics.Windows.DockManager.XamDockManager, InfragisticsWPF4.DockManager.v15.1, Version=15.1.20151.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb
+Infragistics.Controls.Charts.XamPieChart, InfragisticsWPF4.Controls.Charts.XamDataChart.v15.1, Version=15.1.20151.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb

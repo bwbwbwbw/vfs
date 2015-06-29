@@ -1,0 +1,370 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Explorer"
+        xmlns:ig="http://schemas.infragistics.com/xaml"
+        xmlns:igWPF="http://schemas.infragistics.com/xaml/wpf" xmlns:Properties="clr-namespace:Explorer.Properties" x:Class="Explorer.MainWindow"
+        mc:Ignorable="d"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        Title="Virtual File System Explorer - By 施闻轩 (1352978)" Height="513" Width="747.5" Loaded="Window_Loaded">
+    <Window.Resources>
+
+        <Style x:Key="LeftButton" TargetType="{x:Type Button}">
+            <Setter Property="Foreground" Value="#FF444444"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Padding" Value="0,0,0,0"/>
+            <Setter Property="MinHeight" Value="24"/>
+            <Setter Property="MinWidth" Value="24"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="MouseOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="Bd">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <SolidColorBrush Color="#FFCDE6F7"/>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Stroke" Storyboard.TargetName="Bd">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <SolidColorBrush Color="#FF92C0E0"/>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="Bd">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <SolidColorBrush Color="#FF92C0E0"/>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Stroke" Storyboard.TargetName="Bd">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <SolidColorBrush Color="#FF2A8DD4"/>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="DisabledVisualElement">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <Visibility>Visible</Visibility>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Duration="0" Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentControl">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <SolidColorBrush Color="#FF6D6D6D"/>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="FocusStates">
+                                    <VisualState x:Name="Focused">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="FocusedVisualElement">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <Visibility>Visible</Visibility>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Unfocused"/>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Rectangle x:Name="Bd" Fill="Transparent"/>
+                            <Rectangle x:Name="DisabledVisualElement" Fill="Transparent" StrokeThickness="0" Visibility="Collapsed" />
+                            <ContentControl x:Name="ContentControl" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}"/>
+                            </ContentControl>
+                            <Rectangle x:Name="FocusedVisualElement" Stroke="#FF92C0E0" StrokeThickness="1" Visibility="Collapsed"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.3"/>
+                        </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CustomHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="Background" Value="{x:Null}"/>
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+            <Setter Property="MinHeight" Value="30"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Template" Value="{DynamicResource GridViewColumnHeaderControlTemplate1}"/>
+        </Style>
+        <ControlTemplate x:Key="GridViewColumnHeaderControlTemplate1" TargetType="{x:Type GridViewColumnHeader}">
+            <Grid SnapsToDevicePixels="True">
+                <Border x:Name="HeaderBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0,1" Background="{TemplateBinding Background}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition MaxHeight="7"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Rectangle x:Name="UpperHighlight" Fill="#FFE3F7FF" Visibility="Collapsed"/>
+                        <Border Padding="{TemplateBinding Padding}" Grid.RowSpan="2">
+                            <ContentPresenter x:Name="HeaderContent" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="0,0,0,1" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                    </Grid>
+                </Border>
+                <Border x:Name="HeaderHoverBorder" BorderThickness="0" Margin="0"/>
+                <Border x:Name="HeaderPressBorder" BorderThickness="0" Margin="0"/>
+                <Canvas>
+                    <Thumb x:Name="PART_HeaderGripper" Background="#FFA4A4A4">
+                        <Thumb.Style>
+                            <Style TargetType="{x:Type Thumb}">
+                                <Setter Property="Canvas.Right" Value="-9"/>
+                                <Setter Property="Width" Value="18"/>
+                                <Setter Property="Height" Value="{Binding ActualHeight, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                            <GradientStop Color="#FFF2F2F2" Offset="0"/>
+                                            <GradientStop Color="#FFD5D5D5" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Thumb}">
+                                            <Border Background="Transparent" Padding="{TemplateBinding Padding}">
+                                                <Rectangle Fill="{TemplateBinding Background}" HorizontalAlignment="Center" Width="1"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Thumb.Style>
+                    </Thumb>
+                </Canvas>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" TargetName="HeaderBorder">
+                        <Setter.Value>
+                            <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                <GradientStop Color="#FFBDEDFF" Offset="0"/>
+                                <GradientStop Color="#FFB7E7FB" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="BorderBrush" TargetName="HeaderHoverBorder" Value="#FF88CBEB"/>
+                    <Setter Property="Visibility" TargetName="UpperHighlight" Value="Visible"/>
+                    <Setter Property="Background" TargetName="PART_HeaderGripper" Value="Transparent"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" TargetName="HeaderBorder">
+                        <Setter.Value>
+                            <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                <GradientStop Color="#FF8DD6F7" Offset="0"/>
+                                <GradientStop Color="#FF8AD1F5" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="BorderBrush" TargetName="HeaderHoverBorder" Value="#FF95DAF9"/>
+                    <Setter Property="BorderBrush" TargetName="HeaderPressBorder" Value="#FF7A9EB1"/>
+                    <Setter Property="Visibility" TargetName="UpperHighlight" Value="Visible"/>
+                    <Setter Property="Fill" TargetName="UpperHighlight" Value="#FFBCE4F9"/>
+                    <Setter Property="Visibility" TargetName="PART_HeaderGripper" Value="Hidden"/>
+                    <Setter Property="Margin" TargetName="HeaderContent" Value="1,1,0,0"/>
+                </Trigger>
+                <Trigger Property="Height" Value="Auto">
+                    <Setter Property="MinHeight" Value="20"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+    </Window.Resources>
+
+    <Grid x:Name="windowContainer">
+        <ig:ThemeManager.Theme>
+            <ig:Office2013Theme StyleMicrosoftControls="True" />
+        </ig:ThemeManager.Theme>
+        <Grid x:Name="gridContent">
+            <igWPF:XamRibbon Height="144" VerticalAlignment="Top" Theme="Office2013" AllowMinimize="False">
+                <igWPF:XamRibbon.ApplicationMenu>
+                    <igWPF:ApplicationMenu Caption="VFS">
+                    </igWPF:ApplicationMenu>
+                </igWPF:XamRibbon.ApplicationMenu>
+                <igWPF:XamRibbon.QuickAccessToolbar>
+                    <igWPF:QuickAccessToolbar>
+                        <igWPF:QatPlaceholderTool TargetId="(ID)635706096501427406905047584"/>
+                        <igWPF:QatPlaceholderTool TargetId="(ID)635706096501457343539996317"/>
+                        <igWPF:QatPlaceholderTool TargetId="(ID)6357060965014778491785432806"/>
+                    </igWPF:QuickAccessToolbar>
+                </igWPF:XamRibbon.QuickAccessToolbar>
+                <igWPF:RibbonTabItem Header="主页">
+                    <igWPF:RibbonGroup Caption="新建项目">
+                        <igWPF:ButtonTool x:Name="buttonUploadLocal" Caption="添加本地文件" LargeImage="pack://siteoforigin:,,,/Res/698926-icon-93-inbox-upload-64.png" igWPF:RibbonGroup.MinimumSize="ImageAndTextLarge" igWPF:RibbonGroup.MaximumSize="ImageAndTextLarge" IsQatCommonTool="False" Id="(ID)635706096501427406905047584" Click="buttonUploadLocal_Click"/>
+                        <igWPF:SeparatorTool/>
+                        <igWPF:ButtonTool x:Name="buttonNewFolder" Caption="新建文件夹" SmallImage="pack://siteoforigin:,,,/Res/698928-icon-95-folder-24.png" Id="(ID)635706096501457343539996317" Height="22" VerticalAlignment="Top" Click="buttonNewFolder_Click"/>
+                        <igWPF:ButtonTool x:Name="buttonNewFile" Caption="新建文件" SmallImage="pack://siteoforigin:,,,/Res/699326-icon-54-document-24.png" Id="(ID)6357060965014778491785432806" Click="buttonNewFile_Click"/>
+                    </igWPF:RibbonGroup>
+                    <igWPF:RibbonGroup Caption="组织">
+                        <igWPF:ButtonTool x:Name="buttonDelete" Caption="删除" igWPF:RibbonGroup.MaximumSize="ImageAndTextLarge" igWPF:RibbonGroup.MinimumSize="ImageAndTextLarge" LargeImage="pack://siteoforigin:,,,/Res/delete-01.png" Click="buttonDelete_Click"/>
+                        <igWPF:ButtonTool x:Name="buttonRename" Caption="重命名" igWPF:RibbonGroup.MaximumSize="ImageAndTextLarge" igWPF:RibbonGroup.MinimumSize="ImageAndTextLarge" LargeImage="pack://siteoforigin:,,,/Res/rename-01.png" Click="buttonRename_Click"/>
+                    </igWPF:RibbonGroup>
+                    <igWPF:RibbonGroup Caption="文件系统统计信息">
+                        <igWPF:ButtonTool x:Name="buttonRefreshInfo" Caption="刷新统计信息" LargeImage="pack://siteoforigin:,,,/Res/refresh-01.png" igWPF:RibbonGroup.MinimumSize="ImageAndTextLarge" igWPF:RibbonGroup.MaximumSize="ImageAndTextLarge" IsQatCommonTool="False" Id="(ID)635706096501427406905047585" Click="ButtonRefresh_Click"/>
+                        <igWPF:SeparatorTool/>
+                        <StackPanel Margin="0,5,5,0">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                <igWPF:LabelTool>磁盘类型:</igWPF:LabelTool>
+                                <igWPF:LabelTool>内存映射文件</igWPF:LabelTool>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                <igWPF:LabelTool>磁盘容量:</igWPF:LabelTool>
+                                <igWPF:LabelTool x:Name="labelDeviceSize">0</igWPF:LabelTool>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                <igWPF:LabelTool>区块大小:</igWPF:LabelTool>
+                                <igWPF:LabelTool x:Name="labelBlockSize">0 K</igWPF:LabelTool>
+                            </StackPanel>
+                        </StackPanel>
+                        <igWPF:SeparatorTool/>
+                        <StackPanel Margin="0,5,5,0">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                <igWPF:LabelTool>inode 总数:</igWPF:LabelTool>
+                                <igWPF:LabelTool x:Name="labelINodeCapacity">0</igWPF:LabelTool>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                <igWPF:LabelTool>inode 已分配:</igWPF:LabelTool>
+                                <igWPF:LabelTool x:Name="labelINodeAllocated">0</igWPF:LabelTool>
+                            </StackPanel>
+                        </StackPanel>
+                        <igWPF:SeparatorTool/>
+                        <StackPanel Margin="0,5,5,0">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                <igWPF:LabelTool>区块总数:</igWPF:LabelTool>
+                                <igWPF:LabelTool x:Name="labelBlockCapacity">0</igWPF:LabelTool>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                <igWPF:LabelTool>区块已分配:</igWPF:LabelTool>
+                                <igWPF:LabelTool x:Name="labelBlockAllocated">0</igWPF:LabelTool>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                <igWPF:LabelTool>区块已保留:</igWPF:LabelTool>
+                                <igWPF:LabelTool x:Name="labelBlockPreserved">0</igWPF:LabelTool>
+                            </StackPanel>
+                        </StackPanel>
+                    </igWPF:RibbonGroup>
+                </igWPF:RibbonTabItem>
+                <igWPF:RibbonTabItem Header="关于">
+                    <igWPF:RibbonGroup Caption="作者">
+                        <igWPF:LabelTool Caption="1352978 施闻轩"/>
+                        <igWPF:LabelTool Caption="me@breeswish.org"/>
+                    </igWPF:RibbonGroup>
+                    <igWPF:RibbonGroup Caption="第三方库">
+                        <igWPF:LabelTool Caption="protobuf"/>
+                        <igWPF:LabelTool Caption="infragistics WPF"/>
+                    </igWPF:RibbonGroup>
+                </igWPF:RibbonTabItem>
+            </igWPF:XamRibbon>
+            <TextBox x:Name="textboxPath" Height="25" Margin="100,150,10,0" TextWrapping="Wrap" Text="/" VerticalAlignment="Top" VerticalContentAlignment="Center" KeyDown="textboxPath_KeyDown"/>
+            <Button x:Name="buttonBack" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Width="25" Height="25" Style="{DynamicResource LeftButton}" ToolTip="后退" Click="buttonBack_Click" IsEnabled="False">
+                <Viewbox
+				    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="12.000" Height="12.000"
+      >
+                    <Canvas Width="12.000" Height="12.000">
+
+                        <Canvas>
+
+                            <!-- 图层 1/<路径> -->
+                            <Path Fill="#ff4c4c4c" Data="F1 M 12.000,5.250 L 2.872,5.250 L 7.065,1.057 L 6.000,0.000 L 0.000,6.000 L 6.000,12.000 L 7.057,10.943 L 2.872,6.750 L 12.000,6.750 L 12.000,5.250 Z"/>
+
+                        </Canvas>
+                    </Canvas>
+                </Viewbox>
+            </Button>
+            <Button x:Name="buttonForward" HorizontalAlignment="Left" Margin="40,150,0,0" VerticalAlignment="Top" Width="25" Height="25" Style="{DynamicResource LeftButton}" ToolTip="前进" Click="buttonForward_Click" IsEnabled="False">
+                <Viewbox
+				    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="12.000" Height="12.000"
+      >
+                    <Canvas Width="12.000" Height="12.000">
+
+                        <Canvas>
+
+                            <!-- 图层 1/<路径> -->
+                            <Path Fill="#ff4c4c4c" Data="F1 M 6.000,0.000 L 4.943,1.057 L 9.128,5.250 L 0.000,5.250 L 0.000,6.750 L 9.128,6.750 L 4.943,10.943 L 6.000,12.000 L 12.000,6.000 L 6.000,0.000 Z"/>
+
+                        </Canvas>
+                    </Canvas>
+                </Viewbox>
+            </Button>
+            <Button x:Name="buttonUp" HorizontalAlignment="Left" Margin="70,150,0,0" VerticalAlignment="Top" Width="25" Height="25" Style="{DynamicResource LeftButton}" ToolTip="上级目录" Click="buttonUp_Click">
+                <Viewbox
+				    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="12.000" Height="12.000"
+      >
+                    <Canvas Width="12.000" Height="12.000">
+
+                        <Canvas>
+
+                            <!-- 图层 1/<路径> -->
+                            <Path Fill="#ff4c4c4c" Data="F1 M 0.000,6.000 L 1.057,7.057 L 5.250,2.872 L 5.250,12.000 L 6.750,12.000 L 6.750,2.872 L 10.943,7.057 L 12.000,6.000 L 6.000,0.000 L 0.000,6.000 Z"/>
+
+                        </Canvas>
+                    </Canvas>
+                </Viewbox>
+            </Button>
+            <ListView x:Name="listView" BorderThickness="0" MouseDoubleClick="listView_MouseDoubleClick" Margin="10,180,10,10">
+                <ListView.Resources>
+                    <local:ImageConverter x:Key="Conv"/>
+                    <DataTemplate x:Key="IconTemplate">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="{Binding icon, Converter={StaticResource Conv}}" Width="16" Height="16"/>
+                            <TextBlock Text="{Binding name}" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.Resources>
+                <ListView.View>
+                    <GridView ColumnHeaderContainerStyle="{DynamicResource CustomHeaderStyle}">
+                        <GridViewColumn Header="文件名" Width="150" CellTemplate="{StaticResource IconTemplate}" />
+                        <GridViewColumn Header="文件类型" Width="100" DisplayMemberBinding="{Binding extension}"/>
+                        <GridViewColumn Header="大小" Width="70" DisplayMemberBinding="{Binding size}"/>
+                        <GridViewColumn Header="修改时间" Width="100" DisplayMemberBinding="{Binding modifyTime}"/>
+                        <GridViewColumn Header="创建时间" Width="100" DisplayMemberBinding="{Binding creationTime}"/>
+                        <GridViewColumn Header="属性" Width="50" DisplayMemberBinding="{Binding flag}"/>
+                        <GridViewColumn Header="链接数" Width="70" DisplayMemberBinding="{Binding refCount}"/>
+                        <GridViewColumn Header="所有者" Width="70" DisplayMemberBinding="{Binding owner}"/>
+                        <GridViewColumn Header="inode" Width="50" DisplayMemberBinding="{Binding inodeIndex}"/>
+                        <GridViewColumn Header="保留区块" Width="90" DisplayMemberBinding="{Binding blockPreserved}"/>
+                    </GridView>
+                </ListView.View>
+
+            </ListView>
+        </Grid>
+    </Grid>
+</Window>
